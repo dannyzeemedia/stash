@@ -45,21 +45,18 @@ The code is in a private repo; **the board is not**. Everyone keeps their own
 `hub.json`, their own logos and their own history — an update never touches them.
 A machine with no board gets an empty one with three starter categories.
 
-**Windows**
+**Windows** — download one file and double-click it:
 
-```
-git clone https://github.com/dannyzeemedia/stash.git
-```
+[**Install-Stash.bat**](https://raw.githubusercontent.com/dannyzeemedia/stash/main/windows/Install-Stash.bat)
+*(right-click → Save link as)*
 
-Then double-click `windows\Install Stash.bat`. It installs what Python needs,
-registers a task that keeps Stash running (at logon, rechecked every 5 minutes),
-and prints the three clicks to load the browser extension. A second task pulls
-updates every morning at 7am; `windows\Update Stash.bat` does it on demand.
-
-Python must be installed first, from python.org, with "Add python.exe to PATH" ticked.
+It installs Python if you don't have it, puts Stash in your user folder, starts it,
+keeps it running from then on, and prints the three clicks to load the browser
+extension. It checks for a newer version every morning and at every logon, so it
+stays current on its own. `Update Stash.bat` forces a check.
 
 **Linux** — clone it, `pip install -r requirements.txt`, then `./serve.sh`, and add
-`serve.sh` to cron the way this machine does.
+`serve.sh` to cron so it comes back after a reboot.
 
 ## Where things live
 
