@@ -3,8 +3,8 @@
 $ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# Everything that happens goes to a log on the Desktop, so a failure can be sent
-# on rather than vanishing with the window.
+# A log on the Desktop, so a failure can be sent on rather than vanishing.
+# Runs in memory - nothing is written to disk to be blocked or quarantined.
 $LogFile = Join-Path ([Environment]::GetFolderPath("Desktop")) "Stash-install-log.txt"
 try { Start-Transcript -Path $LogFile -Force | Out-Null } catch { }
 
