@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New Tab</title>
+<style>
+  :root { color-scheme: dark light; }
+  html, body { height: 100%; margin: 0; background: #0d0f14; overflow: hidden; }
+  @media (prefers-color-scheme: light) { html, body { background: #f7f6f1; } }
+
+  /* Stash runs inside the new tab page rather than the tab navigating to it,
+     so the address bar keeps focus and you can type straight away.
+     Pinned to the viewport: a percentage height would resolve against the
+     holder, which has none, and collapse the frame to ~150px. */
+  iframe {
+    border: 0; display: block;
+    position: fixed; inset: 0; width: 100vw; height: 100vh;
+  }
+
+  .down { height: 100%; display: grid; place-items: center; }
+  .card {
+    max-width: 380px; padding: 28px 30px; text-align: center;
+    font: 14px/1.6 ui-sans-serif, -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+    color: #8b94a6;
+  }
+  .card h1 { margin: 0 0 6px; font-size: 17px; color: #e7eaf1; }
+  @media (prefers-color-scheme: light) { .card { color: #6a7384; } .card h1 { color: #111318; } }
+  .card img { width: 56px; height: 56px; margin-bottom: 14px; }
+  .card code {
+    display: inline-block; margin-top: 10px; padding: 7px 11px; border-radius: 8px;
+    background: rgba(127,127,127,.14); font-size: 12.5px; color: inherit;
+  }
+  .card button {
+    margin-top: 16px; padding: 8px 16px; border: 0; border-radius: 9px;
+    background: #064bff; color: #fff; font: inherit; cursor: pointer;
+  }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div id="holder" style="height:100%"></div>
+
+<div class="down hidden" id="down">
+  <div class="card">
+    <img src="icons/icon128.png" alt="">
+    <h1>Stash isn't running</h1>
+    <div>It starts with the machine and checks itself every five minutes, so this
+      is usually brief. To start it by hand:</div>
+    <code>~/zm-hub/serve.sh</code>
+    <div><button id="retry">Try again</button></div>
+  </div>
+</div>
+
+<script src="newtab.js"></script>
+</body>
+</html>

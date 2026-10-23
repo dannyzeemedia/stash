@@ -1,0 +1,17 @@
+# Each machine keeps its own board, its own logos, its own history.
+hub.json
+hub.json.tmp
+backups/
+icons/
+logs/
+*.env
+
+# Local-only extras
+stash_newtab_policy.json
+grid/data.js
+grid/health.js
+__pycache__/
+*.pyc
+
+# Optional local extra: the coverage grid and its data
+grid/

@@ -1,0 +1,16 @@
+{
+  "_comment": "Sites whose own declared icon is wrong or too generic. Matched longest-prefix first against 'host/path'. meet.google.com signed out declares the plain Google G; docs.google.com declares one icon for Sheets, Docs, Forms and Slides alike. Add a line here when a site misreports itself.",
+
+  "meet.google.com": "https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/192px.svg",
+  "docs.google.com/spreadsheets": "https://fonts.gstatic.com/s/i/productlogos/sheets_2020q4/v6/192px.svg",
+  "docs.google.com/document": "https://fonts.gstatic.com/s/i/productlogos/docs_2020q4/v6/192px.svg",
+  "docs.google.com/forms": "https://fonts.gstatic.com/s/i/productlogos/forms_2020q4/v6/192px.svg",
+  "docs.google.com/presentation": "https://fonts.gstatic.com/s/i/productlogos/slides_2020q4/v6/192px.svg",
+  "docs.google.com/drawings": "https://fonts.gstatic.com/s/i/productlogos/drive_2020q4/v7/192px.svg",
+  "docs.google.com": "https://fonts.gstatic.com/s/i/productlogos/docs_2020q4/v6/192px.svg",
+  "drive.google.com": "https://fonts.gstatic.com/s/i/productlogos/drive_2020q4/v7/192px.svg",
+  "calendar.google.com": "https://fonts.gstatic.com/s/i/productlogos/calendar_2020q4/v6/192px.svg",
+  "mail.google.com": "https://fonts.gstatic.com/s/i/productlogos/gmail_2020q4/v8/192px.svg",
+  "chat.google.com": "https://fonts.gstatic.com/s/i/productlogos/chat_2020q4/v6/192px.svg",
+  "groups.google.com": "https://fonts.gstatic.com/s/i/productlogos/groups/v6/192px.svg"
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stash</title>
+<link rel="icon" type="image/svg+xml" href="/brand/stash-favicon.svg">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app">
+  <button class="railtoggle" id="railtoggle" title="Hide the panel">&#9664;</button>
+  <aside class="rail" id="rail">
+    <div class="wordmark">
+      <img class="logo dark-only" src="/brand/stash-logo-horizontal-white.svg" alt="Stash">
+      <img class="logo light-only" src="/brand/stash-logo-horizontal-blue.svg" alt="Stash">
+      <small id="stamp"></small>
+    </div>
+
+    <div class="railsec">
+      <h4>Quick links</h4>
+      <div class="pad" id="pad"></div>
+    </div>
+
+    <div class="railsec">
+      <h4>Capture</h4>
+      <button class="inboxbtn" id="inboxbtn">
+        <span>Inbox</span><span class="n zero" id="inboxn">0</span>
+      </button>
+      <button class="inboxbtn" id="trashbtn" style="margin-top:7px">
+        <span>Trash</span><span class="n zero" id="trashn">0</span>
+      </button>
+    </div>
+
+    <div class="railfoot">
+      <button class="mini" id="collapseall">Collapse all</button>
+      <button class="mini" id="expandall">Expand all</button>
+      <button class="mini" id="addcat">+ New category</button>
+      <button class="mini" id="theme">Light / dark</button>
+      <button class="mini" id="gridlink">Coverage grid</button>
+    </div>
+  </aside>
+
+  <main class="board">
+    <div class="topbar">
+      <input class="search" id="search" type="text" placeholder="Filter links…" autocomplete="off" spellcheck="false">
+      <button class="btn" id="addlinktop">+ Link</button>
+    </div>
+    <div class="cols" id="cols"></div>
+  </main>
+</div>
+
+<!-- category editor -->
+<div class="scrim" id="catsheet">
+  <div class="sheet">
+    <header><h3 id="catsheet-title">Category</h3><p class="sub">Name it, give it a logo.</p></header>
+    <div class="body">
+      <div><label for="cat-name">Name</label><input type="text" id="cat-name"></div>
+      <div>
+        <label>Nest under</label>
+        <div id="cat-parent"></div>
+        <p class="hintline">Make this a sub-category inside another card. Or drag its header onto one.</p>
+      </div>
+      <div>
+        <label>Colour</label>
+        <div class="swatches" id="cat-swatches"></div>
+        <p class="hintline">
+          <button class="btn" id="cat-autocolor" style="padding:5px 10px;font-size:12px">Auto-colour</button>
+          reads the brand's colours off its own site and logo.
+        </p>
+      </div>
+      <div>
+        <label>Logo</label>
+        <div class="iconrow">
+          <span class="prev" id="cat-prev"></span>
+          <input type="text" id="cat-icon" placeholder="example.com, or a direct image URL">
+          <button class="btn" id="cat-fetch">Fetch</button>
+          <button class="btn" id="cat-upload">Upload</button>
+          <input type="file" id="cat-file" accept="image/*" hidden>
+        </div>
+        <p class="hintline">Type a site and press Fetch — it grabs that brand's logo and keeps a local copy.</p>
+      </div>
+    </div>
+    <footer>
+      <button class="btn left" id="cat-delete">Delete</button>
+      <button class="btn" data-close>Cancel</button>
+      <button class="btn primary" id="cat-save">Save</button>
+    </footer>
+  </div>
+</div>
+
+<!-- link editor -->
+<div class="scrim" id="linksheet">
+  <div class="sheet">
+    <header><h3 id="linksheet-title">Link</h3><p class="sub" id="linksheet-sub"></p></header>
+    <div class="body">
+      <div><label for="link-title">Title</label><input type="text" id="link-title"></div>
+      <div><label for="link-url">Address</label><input type="url" id="link-url"></div>
+      <div>
+        <label>Icon</label>
+        <div class="iconrow">
+          <span class="prev" id="link-prev"></span>
+          <input type="text" id="link-icon" placeholder="leave blank to use the site's own icon">
+          <button class="btn" id="link-fetch">Fetch</button>
+          <button class="btn" id="link-upload">Upload</button>
+          <input type="file" id="link-file" accept="image/*" hidden>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <button class="btn left" id="link-delete">Delete</button>
+      <button class="btn" data-close>Cancel</button>
+      <button class="btn primary" id="link-save">Save</button>
+    </footer>
+  </div>
+</div>
+
+<!-- trash -->
+<div class="scrim" id="trashsheet">
+  <div class="sheet wide">
+    <header><h3>Trash</h3><p class="sub" id="trashsub">Kept for 30 days, then cleared automatically.</p></header>
+    <div class="body"><ul class="trashlist" id="trashlist"></ul></div>
+    <footer>
+      <button class="btn danger left" id="emptytrash">Empty now</button>
+      <button class="btn good" id="restoreall">Restore everything</button>
+      <button class="btn primary" data-close>Done</button>
+    </footer>
+  </div>
+</div>
+
+<!-- inbox -->
+<div class="scrim" id="inboxsheet">
+  <div class="sheet wide">
+    <header><h3>Inbox</h3><p class="sub">Anything saved from the browser lands here. Pick a category to file it.</p></header>
+    <div class="body"><ul class="inboxlist" id="inboxlist"></ul></div>
+    <footer><button class="btn" data-close>Done</button></footer>
+  </div>
+</div>
+
+<div class="bin" id="bin">
+  <svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zM6 9h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 9z"/></svg>
+  <span>Drop here to delete</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/vendor/Sortable.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
