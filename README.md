@@ -21,15 +21,15 @@ A local bookmark board. **http://localhost:8800** — it starts with the machine
 and anything already on the board is skipped.
 
 **From Papaly:** open your board at papaly.com while signed in, right-click the page,
-and choose *Import this Papaly board into Stash*. Papaly's own Export gives you folder
-names and none of your links, and its public pages no longer serve board content, so
-reading the page you're looking at is the only route that actually works. It brings
-across every category plus the link bar, which lands as "Papaly inbox".
+and choose *Import this Papaly board into Stash*. It reads the board in front of you,
+so it works whether the board is public or private, and brings across every category
+plus the side link bar, which lands as "Papaly inbox". No file to find or save.
 
-**From a file:** any browser's bookmarks export. Folders become categories.
+**From a file:** any bookmarks export, including Papaly's own
+(papaly.com → Settings → Export). Folders become categories.
 
-**From a public Papaly link:** paste the board address. Works only when the board is
-public and Papaly is responding, which is unreliable.
+**From a public Papaly link:** paste the board address. Only works while the board is
+public and Papaly is responding — it 503s fairly often.
 
 ## Brand
 
