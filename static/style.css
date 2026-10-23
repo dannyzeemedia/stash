@@ -442,3 +442,17 @@ body.rail-closed .rail {
   opacity: 0; overflow: hidden; pointer-events: none; border-right-width: 0;
 }
 body.rail-closed .board { padding-left: 46px; }
+
+/* ---------------------------------------------------------------- import */
+.route { border: 1px solid var(--line); border-radius: 11px; padding: 13px 15px; }
+.route + .route { margin-top: 2px; }
+.route h4 { margin: 0 0 5px; font-size: 13.5px; font-weight: 600; }
+.route .hintline { margin: 0 0 9px; }
+.route .iconrow { gap: 9px; }
+.route input[type=text] { flex: 1 1 auto; }
+.steps { margin: 0 0 9px; padding-left: 20px; color: var(--text); font-size: 13px; }
+.steps li { padding: 2px 0; }
+#import-status:not(:empty) {
+  padding: 9px 12px; border-radius: 9px; color: var(--text);
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+}

@@ -411,6 +411,67 @@ def upload_icon():
     return jsonify(icon="icons/" + os.path.basename(fetch_icon.squarify(path)))
 
 
+@app.post("/api/import")
+def do_import():
+    """Add categories from somewhere else. Three ways in, one endpoint:
+      {"categories": [...]}  - already parsed (the extension scrapes Papaly)
+      {"papaly": "<url>"}    - a public Papaly board or profile
+      a posted bookmarks file - any browser's export
+    Nothing is ever replaced; imported cards are added to the board."""
+    import importers
+
+    cats = None
+    upload = request.files.get("file")
+    if upload and upload.filename:
+        text = upload.read().decode("utf-8", "replace")
+        cats = importers.categories_from_bookmarks(text)
+    else:
+        body = request.get_json(silent=True) or {}
+        if body.get("categories"):
+            cats = []
+            for c in body["categories"]:
+                cat = importers._category(c.get("name"))
+                for l in c.get("links") or []:
+                    if l.get("url"):
+                        cat["links"].append(importers._link(l.get("title"), l["url"]))
+                if cat["links"]:
+                    cats.append(cat)
+        elif body.get("papaly"):
+            try:
+                cats = importers.categories_from_papaly(body["papaly"])
+            except Exception as e:
+                return jsonify(error="Couldn't read that Papaly page: %s" % e), 502
+
+    if cats is None:
+        return jsonify(error="nothing to import"), 400
+    if not cats:
+        return jsonify(error="No bookmarks found in that. If the board is private, "
+                             "open it in Papaly and use the browser button instead."), 404
+
+    board = load()
+    have = {l["url"] for c in board["categories"] for l in c["links"]}
+    have |= {l["url"] for l in board["inbox"]}
+
+    added_cats = added_links = skipped = 0
+    for cat in cats:
+        fresh = [l for l in cat["links"] if l["url"] not in have]
+        skipped += len(cat["links"]) - len(fresh)
+        if not fresh:
+            continue
+        have |= {l["url"] for l in fresh}
+        cat["links"] = fresh
+        board["categories"].append(cat)
+        added_cats += 1
+        added_links += len(fresh)
+    save(board)
+
+    for cat in board["categories"][-added_cats:] if added_cats else []:
+        for l in cat["links"][:40]:
+            ensure_icon(l["id"], l["url"])
+
+    return jsonify(ok=True, categories=added_cats, links=added_links, skipped=skipped)
+
+
 @app.post("/api/colors")
 def colors():
     """The brand's 3-5 colours, from what the site declares plus its logo."""

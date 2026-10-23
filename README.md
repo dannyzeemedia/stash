@@ -15,6 +15,22 @@ A local bookmark board. **http://localhost:8800** — it starts with the machine
 - **A click opens in this tab**, like any link. Ctrl-click, middle-click or shift-click opens a new one, and every right-click menu has "Open in a new tab".
 - **Inbox** holds captured pages. Click **File into…** beside one and type to find a category — the picker searches as you type, arrow keys and Enter work.
 
+## Bringing bookmarks in
+
+**Import bookmarks** in the sidebar. Nothing is replaced — what comes in is added,
+and anything already on the board is skipped.
+
+**From Papaly:** open your board at papaly.com while signed in, right-click the page,
+and choose *Import this Papaly board into Stash*. Papaly's own Export gives you folder
+names and none of your links, and its public pages no longer serve board content, so
+reading the page you're looking at is the only route that actually works. It brings
+across every category plus the link bar, which lands as "Papaly inbox".
+
+**From a file:** any browser's bookmarks export. Folders become categories.
+
+**From a public Papaly link:** paste the board address. Works only when the board is
+public and Papaly is responding, which is unreliable.
+
 ## Brand
 
 The identity lives in `static/brand/` — cobalt `#064BFF`, warm ivory `#FFFDF5`, ink `#111318`. White horizontal logo on dark, blue on light, the app icon for the favicon and the extension.

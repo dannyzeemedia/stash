@@ -1,14 +1,18 @@
 {
   "manifest_version": 3,
   "name": "Stash",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Your bookmark board on every new tab, and a button to file the current page into it.",
   "permissions": [
     "activeTab",
+    "contextMenus",
+    "notifications",
     "scripting"
   ],
   "host_permissions": [
-    "http://localhost:8800/*"
+    "http://localhost:8800/*",
+    "https://*.papaly.com/*",
+    "https://papaly.com/*"
   ],
   "background": {
     "service_worker": "background.js"

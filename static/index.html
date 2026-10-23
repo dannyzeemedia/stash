@@ -37,6 +37,7 @@
       <button class="mini" id="collapseall">Collapse all</button>
       <button class="mini" id="expandall">Expand all</button>
       <button class="mini" id="addcat">+ New category</button>
+      <button class="mini" id="importbtn">Import bookmarks</button>
       <button class="mini" id="theme">Light / dark</button>
       <button class="mini" id="gridlink">Coverage grid</button>
     </div>
@@ -113,6 +114,50 @@
       <button class="btn" data-close>Cancel</button>
       <button class="btn primary" id="link-save">Save</button>
     </footer>
+  </div>
+</div>
+
+<!-- import -->
+<div class="scrim" id="importsheet">
+  <div class="sheet wide">
+    <header><h3>Import bookmarks</h3><p class="sub">Nothing is replaced — whatever comes in is added to your board.</p></header>
+    <div class="body">
+      <div class="route">
+        <h4>Coming from Papaly</h4>
+        <p class="hintline">Papaly's own export gives you folder names and none of your
+          links, so use the browser button instead — it reads the board you're looking at,
+          public or private.</p>
+        <ol class="steps">
+          <li>Open your board at <b>papaly.com</b>, signed in</li>
+          <li>Right-click anywhere on the page</li>
+          <li>Choose <b>Import this Papaly board into Stash</b></li>
+        </ol>
+        <p class="hintline">Needs the Stash browser extension. It tells you how many links came over.</p>
+      </div>
+
+      <div class="route">
+        <h4>From a file</h4>
+        <p class="hintline">Any browser's bookmarks export (Chrome, Brave, Firefox, Safari).
+          Folders become categories.</p>
+        <div class="iconrow">
+          <button class="btn" id="import-file-btn">Choose a file…</button>
+          <input type="file" id="import-file" accept=".html,.htm,text/html" hidden>
+          <span class="hintline" id="import-file-name"></span>
+        </div>
+      </div>
+
+      <div class="route">
+        <h4>From a public Papaly link</h4>
+        <p class="hintline">Only works if the board is public and Papaly is up — it often isn't.</p>
+        <div class="iconrow">
+          <input type="text" id="import-url" placeholder="papaly.com/someone/ab12C/Work">
+          <button class="btn" id="import-url-btn">Import</button>
+        </div>
+      </div>
+
+      <p class="hintline" id="import-status"></p>
+    </div>
+    <footer><button class="btn primary" data-close>Done</button></footer>
   </div>
 </div>
 

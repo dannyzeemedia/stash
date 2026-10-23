@@ -1252,6 +1252,47 @@
     setTimeout(packCards, 280);
   });
 
+  function afterImport(out) {
+    if (out.error) { $("import-status").textContent = out.error; return; }
+    var bits = out.links + " link" + (out.links === 1 ? "" : "s") +
+      " in " + out.categories + " categor" + (out.categories === 1 ? "y" : "ies");
+    if (out.skipped) { bits += ", " + out.skipped + " already here"; }
+    $("import-status").textContent = "Imported " + bits + ".";
+    refreshBoard();
+    toast("Imported " + bits);
+  }
+
+  $("importbtn").addEventListener("click", function () {
+    $("import-status").textContent = "";
+    $("import-file-name").textContent = "";
+    showSheet("importsheet");
+  });
+
+  $("import-file-btn").addEventListener("click", function () { $("import-file").click(); });
+
+  $("import-file").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (!file) { return; }
+    $("import-file-name").textContent = file.name;
+    $("import-status").textContent = "Reading " + file.name + "\u2026";
+    var body = new FormData();
+    body.append("file", file);
+    fetch("/api/import", { method: "POST", body: body })
+      .then(function (r) { return r.json(); })
+      .then(afterImport)
+      .catch(function (e) { $("import-status").textContent = e.message; });
+    this.value = "";
+  });
+
+  $("import-url-btn").addEventListener("click", function () {
+    var url = $("import-url").value.trim();
+    if (!url) { $("import-status").textContent = "Paste a Papaly board link first."; return; }
+    $("import-status").textContent = "Reading that board\u2026 Papaly can be slow.";
+    api("POST", "/import", { papaly: url })
+      .then(afterImport)
+      .catch(function (e) { $("import-status").textContent = e.message; });
+  });
+
   $("addcat").addEventListener("click", function () { openCatSheet(null); });
   $("addlinktop").addEventListener("click", function () {
     openLinkSheet(null, board.categories[0] && board.categories[0].id);
