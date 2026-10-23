@@ -1,6 +1,12 @@
 # Installs Stash. Downloads the app, sets it up, keeps it running, keeps it
 # updated. Safe to run again any time - it never touches your board.
 $ErrorActionPreference = "Stop"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# Everything that happens goes to a log on the Desktop, so a failure can be sent
+# on rather than vanishing with the window.
+$LogFile = Join-Path ([Environment]::GetFolderPath("Desktop")) "Stash-install-log.txt"
+try { Start-Transcript -Path $LogFile -Force | Out-Null } catch { }
 
 $Repo    = "dannyzeemedia/stash"
 $Root    = Join-Path $env:LOCALAPPDATA "Stash"
@@ -13,6 +19,17 @@ Say ""
 Say "  Stash" Cyan
 Say "  a bookmark board that lives on this computer"
 Say ""
+
+function Finish($code) {
+  try { Stop-Transcript | Out-Null } catch { }
+  if ($code -ne 0) {
+    Say ""
+    Say "  It didn't finish. There's a log on your Desktop:" Yellow
+    Say "  Stash-install-log.txt - send that to Danny." Yellow
+  }
+  Read-Host "Press Enter to close"
+  exit $code
+}
 
 # --- Python -----------------------------------------------------------------
 $py = (Get-Command python.exe -ErrorAction SilentlyContinue).Source
@@ -29,13 +46,18 @@ if (-not $py) {
     Say "Couldn't install Python automatically." Red
     Say "Get it from https://www.python.org/downloads/ - tick 'Add python.exe to PATH' -"
     Say "then run this installer again."
-    Read-Host "Press Enter to close"
-    exit 1
+    Finish 1
   }
 }
 Say "Python: $py"
 
 # --- the app ----------------------------------------------------------------
+trap {
+  Say ""
+  Say ("Something went wrong: " + $_.Exception.Message) Red
+  Finish 1
+}
+
 Say "Downloading Stash..."
 $tmp = Join-Path $env:TEMP ("stash-" + [guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
@@ -107,8 +129,7 @@ try {
   Say "  Stash is running: http://localhost:8800" Green
 } catch {
   Say "Stash didn't come up. Look in $Root\logs\server.log" Red
-  Read-Host "Press Enter to close"
-  exit 1
+  Finish 1
 }
 
 # --- shortcut ---------------------------------------------------------------
@@ -127,4 +148,4 @@ Say "       $Root\extension" White
 Say ""
 Say "  Then every new tab is your board, and Ctrl+Shift+S saves the page you're on."
 Say ""
-Read-Host "Press Enter to close"
+Finish 0
