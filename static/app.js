@@ -308,8 +308,9 @@
 
       [].forEach.call(sec.querySelectorAll("li"), function (li) {
         var link = linkById(li.dataset.link);
-        openOn(li.querySelector(".t"), link.url, link.id);
-        openOn(li.querySelector(".row").firstElementChild, link.url, link.id);
+        // The whole row is the target. Binding only the text left half the
+        // row dead, which felt like clicks not registering.
+        openOn(li.querySelector(".row"), link.url, link.id);
         li.querySelector(".x").addEventListener("click", function (ev) {
           ev.stopPropagation();
           linkMenu(ev, link, cat);
@@ -1023,7 +1024,7 @@
         '<span class="t"><div>' + esc(l.title) + "</div>" +
         '<div class="h">' + esc(host(l.url)) + "</div></span>";
 
-      openOn(li.querySelector(".t"), l.url, l.id);
+      openOn(li, l.url, l.id);
       li.addEventListener("contextmenu", function (ev) { linkMenu(ev, l, null); });
 
       li.appendChild(buildPicker(function (catId) {
@@ -1041,14 +1042,15 @@
       pin.className = "iconbtn pin";
       pin.title = "Add to quick links";
       pin.innerHTML = PIN_SVG;
-      pin.addEventListener("click", function () { pinToPad(l); });
+      pin.addEventListener("click", function (ev) { ev.stopPropagation(); pinToPad(l); });
       li.appendChild(pin);
 
       var del = document.createElement("button");
       del.className = "iconbtn";
       del.title = "Move to trash";
       del.innerHTML = TRASH_SVG;
-      del.addEventListener("click", function () {
+      del.addEventListener("click", function (ev) {
+        ev.stopPropagation();
         api("DELETE", "/links/" + l.id).then(function () {
           board.inbox = board.inbox.filter(function (x) { return x.id !== l.id; });
           return refreshBoard();
