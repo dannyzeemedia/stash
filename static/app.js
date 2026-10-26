@@ -189,6 +189,9 @@
       group: { name: "links", pull: false, put: true },
       sort: true,
       forceFallback: true,
+      // A click is not a drag. Without a tolerance any hand jitter while the
+      // button is down starts a drag, and Sortable then swallows the click.
+      fallbackTolerance: 8,
       animation: 140,
       draggable: ".slot",
       // Rearranging the pad: the tiles carry their original index, so the new
@@ -332,6 +335,9 @@
         // Mouse-event dragging rather than the browser's own: it behaves the
         // same everywhere and the drag image follows the cursor properly.
         forceFallback: true,
+        // A click is not a drag. Without a tolerance any hand jitter while the
+        // button is down starts a drag, and Sortable then swallows the click.
+        fallbackTolerance: 8,
         ghostClass: "drag-ghost",
         chosenClass: "drag-chosen",
         onStart: function (ev) { armBin(true); dragging = ev.item.dataset.link; },
@@ -365,6 +371,9 @@
         handle: ".cathead, .subhead",
         draggable: ".card",
         forceFallback: true,
+        // A click is not a drag. Without a tolerance any hand jitter while the
+        // button is down starts a drag, and Sortable then swallows the click.
+        fallbackTolerance: 8,
         ghostClass: "ghost",
         onStart: function (ev) { armBin(true, "category"); dragging = ev.item.dataset.cat; },
         onEnd: function (ev) {
@@ -387,6 +396,9 @@
       handle: ".cathead, .subhead",
       draggable: ".card",
       forceFallback: true,
+      // A click is not a drag. Without a tolerance any hand jitter while the
+      // button is down starts a drag, and Sortable then swallows the click.
+      fallbackTolerance: 8,
       ghostClass: "ghost",
       onStart: function (ev) {
         armBin(true, "category");
