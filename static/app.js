@@ -620,22 +620,53 @@
   /* The page holds the board in memory, but the extension writes to the file
      behind its back. So re-read before showing a list, and when the tab comes
      back to the front — never mid-drag or mid-edit, which would clobber it. */
+  /* Re-drawing replaces every row, and a browser only fires a click when the
+     press and the release landed on the same element. So a refresh that lands
+     between the two silently destroys the click. In the new tab Stash sits in
+     a frame, and pressing the mouse is what gives that frame focus, so the
+     focus refresh below was eating the first click into the page every time. */
+  var pressed = false;
+  var refreshWanted = false;
+
+  document.addEventListener("pointerdown", function () { pressed = true; }, true);
+  document.addEventListener("pointercancel", function () { pressed = false; }, true);
+  document.addEventListener("pointerup", function () {
+    pressed = false;
+    if (!refreshWanted) { return; }
+    refreshWanted = false;
+    // The click the browser is about to fire comes after the release, so let
+    // it through before touching the page.
+    setTimeout(function () { if (!busy()) { refreshBoard(); } }, 250);
+  }, true);
+
   function busy() {
-    return !!dragging || !!document.querySelector(".scrim.open");
+    return pressed || !!dragging || !!document.querySelector(".scrim.open");
   }
 
+  // The answer the board was last drawn from, word for word. If the file
+  // hasn't changed there is nothing to redraw, and not redrawing is what
+  // keeps a click in progress alive.
+  var painted = "";
+
   function refreshBoard(then) {
-    return fetch("/api/board").then(function (r) { return r.json(); }).then(function (fresh) {
-      board = fresh;
+    return fetch("/api/board").then(function (r) { return r.text(); }).then(function (text) {
+      if (text === painted) { if (then) { then(); } return; }
+      painted = text;
+      board = JSON.parse(text);
       while (board.quickpad.length < 12) { board.quickpad.push(null); }
       renderPad(); renderBoard(); renderInbox(); renderTrash();
       if (then) { then(); }
     }).catch(function () { if (then) { then(); } });
   }
 
-  window.addEventListener("focus", function () { if (!busy()) { refreshBoard(); } });
+  function wantRefresh() {
+    if (busy()) { refreshWanted = true; return; }
+    refreshBoard();
+  }
+
+  window.addEventListener("focus", wantRefresh);
   document.addEventListener("visibilitychange", function () {
-    if (!document.hidden && !busy()) { refreshBoard(); }
+    if (!document.hidden) { wantRefresh(); }
   });
 
   function trashCategory(catId) {
@@ -1352,8 +1383,9 @@
     }
   } catch (e) {}
 
-  fetch("/api/board").then(function (r) { return r.json(); }).then(function (b) {
-    board = b;
+  fetch("/api/board").then(function (r) { return r.text(); }).then(function (text) {
+    painted = text;
+    board = JSON.parse(text);
     while (board.quickpad.length < 12) { board.quickpad.push(null); }
     var n = board.categories.reduce(function (a, c) { return a + c.links.length; }, 0);
     $("stamp").textContent = n + " links · " + board.categories.length + " categories";
